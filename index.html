@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurante Tejota · La Taberna del Herrero · Yecla</title>
+<meta name="description" content="Restaurante Tejota, La Taberna del Herrero. Cocina tradicional murciana con productos de temporada en Yecla. Reservas: 611 510 550.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js?v=20260531"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js?v=20260531"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js?v=20260531"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js?v=20260531"></script>
+<style>
+/* ── TOKENS ─────────────────────────────────────────────── */
+:root {
+  --white:     #ffffff;
+  --off-white: #F8F5F0;
+  --dark:      #1a1a1a;
+  --gold:      #C9A84C;
+  --gold-light:#E2C77A;
+  --rust:      #8B3A3A;
+  --cream:     #F2EBDA;
+  --muted:     #6b6460;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans:  'Inter', system-ui, sans-serif;
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── RESET ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { background: var(--white); color: var(--dark); font-family: var(--font-sans); overflow-x: hidden; }
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* ── SPLASH ─────────────────────────────────────────────── */
+#splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--dark);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 1rem;
+  transition: opacity 0.6s var(--ease-out), visibility 0.6s;
+}
+#splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.splash-logo {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+.splash-sub {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+.splash-bar {
+  width: 160px; height: 1px;
+  background: rgba(201,168,76,0.25);
+  overflow: hidden; margin-top: 0.5rem;
+}
+.splash-bar-fill {
+  height: 100%; width: 0;
+  background: var(--gold);
+  animation: splashFill 1.4s var(--ease-out) 0.2s forwards;
+}
+@keyframes splashFill { to { width: 100%; } }
+
+/* ── WHATSAPP BUTTON ────────────────────────────────────── */
+.wa-btn {
+  position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 8000;
+  width: 58px; height: 58px; border-radius: 50%;
+  background: #25D366;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.wa-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(37,211,102,0.6); }
+.wa-btn svg { width: 30px; height: 30px; fill: #fff; }
+
+/* ── NAV ────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+  padding: 0 2.5rem;
+  height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
+}
+nav.scrolled {
+  background: rgba(26,26,26,0.92);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 rgba(201,168,76,0.18);
+}
+.nav-logo {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+.nav-logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.72);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-cta {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.55rem 1.4rem;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  border-radius: 2px;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-cta:hover { background: var(--gold); color: var(--dark); }
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  nav { padding: 0 1.25rem; }
+}
+
+/* ── HERO ───────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  height: 100svh; min-height: 600px;
+  overflow: hidden;
+  display: flex; align-items: flex-end; justify-content: flex-start;
+  background: var(--dark);
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background-image: url('foto-carne.jpg');
+  background-size: cover;
+  background-position: center 40%;
+  animation: kenBurns 18s ease-in-out infinite alternate;
+  transform-origin: center center;
+}
+@keyframes kenBurns {
+  0%   { transform: scale(1.0) translate(0, 0); }
+  100% { transform: scale(1.14) translate(-2.5%, -1.5%); }
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(10,8,6,0.88) 0%,
+    rgba(10,8,6,0.55) 45%,
+    rgba(10,8,6,0.18) 100%
+  );
+}
+#embersCanvas {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 2;
+}
+.hero-content {
+  position: relative; z-index: 10;
+  padding: 0 clamp(1.5rem, 6vw, 7rem) clamp(5rem, 10vh, 8rem);
+  max-width: 780px;
+  overflow: hidden;
+}
+.hero-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.4rem;
+  opacity: 0;
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 7vw, 6rem);
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--white);
+  margin-bottom: 1.6rem;
+  overflow: hidden;
+}
+.hero-title .ht-line {
+  display: block;
+  transform: translateY(110%);
+}
+.hero-title em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-rule {
+  width: 0; height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin-bottom: 1.4rem;
+}
+.hero-sub {
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+  color: rgba(255,255,255,0.62);
+  line-height: 1.7;
+  max-width: 420px;
+  margin-bottom: 2.2rem;
+  opacity: 0;
+}
+.hero-actions {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  opacity: 0;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  background: var(--gold);
+  color: var(--dark);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border: 1px solid rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.85);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-1px); }
+
+/* TICKER */
+.hero-ticker {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 12;
+  background: var(--gold);
+  height: 38px;
+  overflow: hidden;
+  display: flex; align-items: center;
+}
+.ticker-track {
+  display: flex;
+  white-space: nowrap;
+  animation: tickerRun 30s linear infinite;
+  will-change: transform;
+}
+.ticker-track span {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dark);
+  padding: 0 2.5rem;
+  font-weight: 600;
+}
+.ticker-sep {
+  color: rgba(26,26,26,0.35) !important;
+  padding: 0 !important;
+}
+@keyframes tickerRun {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── SERVICES STRIP ─────────────────────────────────────── */
+.services-strip {
+  background: var(--dark);
+  padding: 1.4rem 0;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(201,168,76,0.15);
+}
+.services-track {
+  display: flex; white-space: nowrap;
+  animation: servicesRun 22s linear infinite;
+  will-change: transform;
+}
+.services-track .s-item {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0 2.2rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.services-track .s-item svg {
+  width: 14px; height: 14px;
+  fill: var(--gold); opacity: 0.7; flex-shrink: 0;
+}
+@keyframes servicesRun {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── REVEAL ─────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── SECTION LABEL ──────────────────────────────────────── */
+.sec-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.9rem;
+}
+.sec-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15;
+  font-weight: 700;
+}
+.sec-title em { font-style: italic; color: var(--gold); }
+.sec-rule {
+  width: 52px; height: 2px;
+  background: var(--gold);
+  margin: 1.4rem 0;
+}
+.sec-sub {
+  color: var(--muted);
+  font-size: 0.97rem;
+  line-height: 1.75;
+  max-width: 560px;
+}
+
+/* ── NOSOTROS ───────────────────────────────────────────── */
+.nosotros {
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem);
+  background: var(--white);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+@media (max-width: 768px) {
+  .nosotros { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+.nosotros-text p {
+  color: var(--muted); font-size: 0.97rem; line-height: 1.75; margin-top: 1rem;
+}
+.nosotros-img-wrap {
+  position: relative;
+}
+.nosotros-img-wrap img {
+  width: 100%; aspect-ratio: 4/5;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.nosotros-badge {
+  position: absolute; bottom: -1.5rem; left: -1.5rem;
+  background: var(--gold);
+  color: var(--dark);
+  padding: 1.1rem 1.4rem;
+  border-radius: 2px;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  box-shadow: 0 8px 28px rgba(201,168,76,0.4);
+}
+.nosotros-badge small {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+  opacity: 0.75;
+}
+
+/* ── QUOTE INTERLUDE ────────────────────────────────────── */
+.quote-interlude {
+  background: var(--dark);
+  padding: clamp(4rem, 8vw, 6rem) clamp(1.5rem, 8vw, 10rem);
+  text-align: center;
+  border-top: 1px solid rgba(201,168,76,0.15);
+  border-bottom: 1px solid rgba(201,168,76,0.15);
+}
+.quote-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-style: italic;
+  color: var(--white);
+  line-height: 1.5;
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+}
+.quote-text em {
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-style: italic;
+}
+.quote-author {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+}
+
+/* ── CARTA ──────────────────────────────────────────────── */
+.carta {
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem);
+  background: var(--off-white);
+}
+.carta-header { text-align: center; margin-bottom: 3rem; }
+.carta-header .sec-rule { margin: 1.4rem auto; }
+.carta-header .sec-sub { margin: 0 auto; text-align: center; }
+.carta-tabs {
+  display: flex; gap: 0.5rem; flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+.tab-btn {
+  padding: 0.55rem 1.4rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(26,26,26,0.18);
+  border-radius: 2px;
+  cursor: pointer;
+  color: var(--muted);
+  transition: all 0.2s;
+  font-family: var(--font-sans);
+}
+.tab-btn:hover, .tab-btn.active {
+  background: var(--dark);
+  border-color: var(--dark);
+  color: var(--white);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+.dish-card {
+  background: var(--white);
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: box-shadow 0.3s;
+  transform-style: preserve-3d;
+}
+.dish-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+.dish-icon {
+  padding: 1.5rem 1.5rem 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.dish-icon svg {
+  width: 38px; height: 38px;
+  stroke: var(--gold); fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+.dish-body { padding: 1.1rem 1.5rem 1.6rem; }
+.dish-name {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+.dish-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+.dish-price {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+
+/* ── GALERIA ────────────────────────────────────────────── */
+.galeria {
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem);
+  background: var(--white);
+}
+.galeria-header { margin-bottom: 2.5rem; }
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+.g-item { overflow: hidden; border-radius: 2px; }
+.g-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease-out); }
+.g-item:hover img { transform: scale(1.04); }
+.g-item:nth-child(1) { grid-column: 1 / 7; grid-row: 1; aspect-ratio: 16/10; }
+.g-item:nth-child(2) { grid-column: 7 / 10; grid-row: 1; aspect-ratio: 3/4; }
+.g-item:nth-child(3) { grid-column: 10 / 13; grid-row: 1; aspect-ratio: 3/4; }
+.g-item:nth-child(4) { grid-column: 1 / 5; grid-row: 2; aspect-ratio: 4/3; }
+.g-item:nth-child(5) { grid-column: 5 / 9; grid-row: 2; aspect-ratio: 4/3; }
+.g-item:nth-child(6) { grid-column: 9 / 13; grid-row: 2; aspect-ratio: 4/3; }
+@media (max-width: 768px) {
+  .galeria-grid { grid-template-columns: 1fr 1fr; }
+  .g-item { grid-column: auto !important; grid-row: auto !important; aspect-ratio: 1 !important; }
+}
+
+/* ── RESENAS ────────────────────────────────────────────── */
+.resenas {
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem);
+  background: var(--off-white);
+}
+.resenas-header { text-align: center; margin-bottom: 3rem; }
+.resenas-header .sec-rule { margin: 1.4rem auto; }
+.resenas-inner {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .resenas-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+.rating-big {
+  text-align: center;
+  background: var(--white);
+  border-radius: 4px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+.rating-score {
+  font-family: var(--font-serif);
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--dark);
+  line-height: 1;
+}
+.rating-stars {
+  color: var(--gold);
+  font-size: 1.4rem;
+  margin: 0.5rem 0;
+  letter-spacing: 0.06em;
+}
+.rating-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+.chart-container { max-width: 240px; margin: 0 auto; }
+.reviews-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.review-card {
+  background: var(--white);
+  border-radius: 4px;
+  padding: 1.6rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  border-left: 3px solid var(--gold);
+}
+.review-stars { color: var(--gold); font-size: 0.95rem; margin-bottom: 0.6rem; }
+.review-text {
+  font-size: 0.92rem;
+  color: var(--dark);
+  line-height: 1.7;
+  margin-bottom: 0.8rem;
+  font-style: italic;
+}
+.review-author {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* ── CONTACTO ───────────────────────────────────────────── */
+.contacto {
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem);
+  background: var(--white);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 768px) {
+  .contacto { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+.hours-list { margin-top: 2rem; }
+.hours-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  font-size: 0.9rem;
+}
+.hours-item:last-child { border-bottom: none; }
+.hours-day { font-weight: 600; }
+.hours-time { color: var(--muted); }
+.hours-closed { color: var(--rust); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.contact-detail {
+  display: flex; align-items: center; gap: 0.6rem;
+  margin-top: 1.5rem;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+.contact-detail svg { width: 16px; height: 16px; fill: var(--gold); flex-shrink: 0; }
+.map-wrap iframe {
+  width: 100%; height: 360px;
+  border-radius: 3px;
+  border: none;
+  filter: grayscale(20%);
+}
+.map-cta {
+  margin-top: 1rem;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  background: var(--dark);
+  color: var(--white);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+.map-cta:hover { background: var(--gold); color: var(--dark); }
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+footer {
+  background: var(--dark);
+  padding: clamp(2.5rem, 4vw, 3.5rem) clamp(1.5rem, 6vw, 7rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  border-top: 1px solid rgba(201,168,76,0.15);
+}
+.footer-logo { font-family: var(--font-serif); font-size: 1.3rem; color: var(--white); }
+.footer-logo span { color: var(--gold); }
+.footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; }
+.footer-links { display: flex; gap: 1.5rem; }
+.footer-links a {
+  font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4); transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo">Tejota</div>
+  <div class="splash-sub">La Taberna del Herrero &middot; Yecla</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
+<!-- WHATSAPP -->
+<a class="wa-btn" href="https://wa.me/34611510550?text=Hola%2C%20me%20gustar%C3%ADa%20hacer%20una%20reserva%20en%20Restaurante%20Tejota." target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Tejota<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#carta">Carta</a></li>
+    <li><a href="#galeria">Galer&iacute;a</a></li>
+    <li><a href="#resenas">Opiniones</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="tel:+34611510550" class="nav-cta">Reservar</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <canvas id="embersCanvas"></canvas>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">La Taberna del Herrero &middot; Yecla, Murcia</p>
+    <h1 class="hero-title">
+      <span class="ht-line">Cocina de</span>
+      <span class="ht-line"><em>ra&iacute;z,</em> sabor</span>
+      <span class="ht-line">de siempre</span>
+    </h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">Productos de temporada, brasas lentas y la tradici&oacute;n murciana en cada plato. Reserva tu mesa y vive la experiencia.</p>
+    <div class="hero-actions">
+      <a href="tel:+34611510550" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        Llamar ahora
+      </a>
+      <a href="#carta" class="btn-ghost">Ver la carta</a>
+    </div>
+  </div>
+
+  <div class="hero-ticker">
+    <div class="ticker-track">
+      <span>Chulet&oacute;n a la Brasa</span><span class="ticker-sep">&middot;</span>
+      <span>Cocina Tradicional Murciana</span><span class="ticker-sep">&middot;</span>
+      <span>Productos de Temporada</span><span class="ticker-sep">&middot;</span>
+      <span>Tabla de Ib&eacute;ricos</span><span class="ticker-sep">&middot;</span>
+      <span>Tartar de At&uacute;n</span><span class="ticker-sep">&middot;</span>
+      <span>Chulet&oacute;n a la Brasa</span><span class="ticker-sep">&middot;</span>
+      <span>Cocina Tradicional Murciana</span><span class="ticker-sep">&middot;</span>
+      <span>Productos de Temporada</span><span class="ticker-sep">&middot;</span>
+      <span>Tabla de Ib&eacute;ricos</span><span class="ticker-sep">&middot;</span>
+      <span>Tartar de At&uacute;n</span><span class="ticker-sep">&middot;</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES STRIP -->
+<div class="services-strip">
+  <div class="services-track">
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Cocina de Mercado</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Brasas y Parrilla</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Ib&eacute;ricos Seleccionados</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Vinos D.O. Jumilla</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Eventos Privados</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Reservas Online</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Cocina de Mercado</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Brasas y Parrilla</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Ib&eacute;ricos Seleccionados</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Vinos D.O. Jumilla</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Eventos Privados</div>
+    <div class="s-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Reservas Online</div>
+  </div>
+</div>
+
+<!-- NOSOTROS -->
+<section class="nosotros" id="nosotros">
+  <div class="nosotros-text reveal">
+    <p class="sec-label">Nuestra historia</p>
+    <h2 class="sec-title">Tradici&oacute;n que <em>sabe</em> a hogar</h2>
+    <div class="sec-rule"></div>
+    <p class="sec-sub">Restaurante Tejota naci&oacute; con una sola idea en mente: recuperar los sabores de siempre con el respeto que merecen los buenos productos.</p>
+    <p>En La Taberna del Herrero, en el coraz&oacute;n de Yecla, cada plato es el resultado de a&ntilde;os de pasi&oacute;n por la cocina murciana. Trabajamos con productores locales y de temporada para ofrecerte lo mejor de nuestra tierra en cada visita.</p>
+    <p>Nuestras brasas llevan el sello de quien entiende que la calidad no se improvisa. De la parrilla a la mesa, con el cari&ntilde;o de siempre.</p>
+  </div>
+  <div class="nosotros-img-wrap reveal">
+    <img src="foto-tabla.jpg" alt="Tabla de ib&eacute;ricos y quesos seleccionados">
+    <div class="nosotros-badge">4.4 <small>en Google Reviews</small></div>
+  </div>
+</section>
+
+<!-- QUOTE INTERLUDE -->
+<div class="quote-interlude reveal">
+  <blockquote class="quote-text">
+    &ldquo;Cada plato era una delicia. Y la carne al centro estaba <em>tierna y jugosa.</em> Un sitio que repetir&iacute;a sin dudarlo.&rdquo;
+  </blockquote>
+  <p class="quote-author">Felix Bravo &middot; Google Reviews</p>
+</div>
+
+<!-- CARTA -->
+<section class="carta" id="carta">
+  <div class="carta-header reveal">
+    <p class="sec-label">Nuestra carta</p>
+    <h2 class="sec-title">Platos con <em>alma</em></h2>
+    <div class="sec-rule"></div>
+    <p class="sec-sub">Ingredientes de temporada, brasas lentas y recetas que honran la tradici&oacute;n murciana.</p>
+  </div>
+
+  <div class="carta-tabs reveal">
+    <button class="tab-btn active" data-tab="entrantes">Entrantes</button>
+    <button class="tab-btn" data-tab="carnes">Carnes</button>
+    <button class="tab-btn" data-tab="pescados">Pescados</button>
+    <button class="tab-btn" data-tab="postres">Postres</button>
+  </div>
+
+  <!-- ENTRANTES -->
+  <div class="tab-panel active" id="tab-entrantes">
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Tabla de Ib&eacute;ricos y Quesos</div>
+        <div class="dish-desc">Selecci&oacute;n de jam&oacute;n ib&eacute;rico, lomo, queso curado y frutos secos de la tierra.</div>
+        <div class="dish-price">desde 14 &euro;</div>
+      </div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M2 12l4-4v2.5h4.5c1.1-2.4 3.5-4 6.3-4C20.6 6.5 23 9.0 23 12s-2.4 5.5-6.2 5.5c-2.8 0-5.2-1.6-6.3-4H6v2.5L2 12z"/><circle cx="18" cy="11" r="1"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Tartar de At&uacute;n</div>
+        <div class="dish-desc">At&uacute;n rojo marinado con aguacate, soja y s&eacute;samo tostado. Frescor en estado puro.</div>
+        <div class="dish-price">desde 13 &euro;</div>
+      </div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C7.58 2 4 5.58 4 10c0 2.03.76 3.87 2 5.28V20h12v-4.72A7.96 7.96 0 0020 10c0-4.42-3.58-8-8-8zm-1 15v-3h2v3h-2zm5.78-5H7.22C7.08 11.38 7 10.7 7 10c0-2.76 2.24-5 5-5s5 2.24 5 5c0 .7-.08 1.38-.22 2z"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Revuelto de Boletus</div>
+        <div class="dish-desc">Huevos de corral con boletus edulis salteados y trufa rallada al momento.</div>
+        <div class="dish-price">desde 11 &euro;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARNES -->
+  <div class="tab-panel" id="tab-carnes">
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5 0.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Chulet&oacute;n a la Brasa</div>
+        <div class="dish-desc">Chulet&oacute;n de vaca madurada cocinado a las brasas. Para compartir y disfrutar.</div>
+        <div class="dish-price">desde 28 &euro; / kg</div>
+      </div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5 0.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Entrecot de A&ntilde;ojo</div>
+        <div class="dish-desc">Ternera de crianza local, jugosa y tierna. Servida con pimientos asados y patatas.</div>
+        <div class="dish-price">desde 20 &euro;</div>
+      </div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Costillas de Cerdo Ib&eacute;rico</div>
+        <div class="dish-desc">Costillas confitadas y acabadas a la brasa con salsa de miel y romero.</div>
+        <div class="dish-price">desde 18 &euro;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESCADOS -->
+  <div class="tab-panel" id="tab-pescados">
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M2 12l4-4v2.5h4.5c1.1-2.4 3.5-4 6.3-4C20.6 6.5 23 9.0 23 12s-2.4 5.5-6.2 5.5c-2.8 0-5.2-1.6-6.3-4H6v2.5L2 12z"/><circle cx="18" cy="11" r="1"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Lubina a la Sal</div>
+        <div class="dish-desc">Lubina entera cocinada en costra de sal. Textura perfecta y sabor marino aut&eacute;ntico.</div>
+        <div class="dish-price">desde 22 &euro;</div>
+      </div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M2 12l4-4v2.5h4.5c1.1-2.4 3.5-4 6.3-4C20.6 6.5 23 9.0 23 12s-2.4 5.5-6.2 5.5c-2.8 0-5.2-1.6-6.3-4H6v2.5L2 12z"/><circle cx="18" cy="11" r="1"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Gambas al Ajillo</div>
+        <div class="dish-desc">Gambas frescas salteadas con aceite de oliva virgen extra, ajo y guindilla.</div>
+        <div class="dish-price">desde 14 &euro;</div>
+      </div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M2 12l4-4v2.5h4.5c1.1-2.4 3.5-4 6.3-4C20.6 6.5 23 9.0 23 12s-2.4 5.5-6.2 5.5c-2.8 0-5.2-1.6-6.3-4H6v2.5L2 12z"/><circle cx="18" cy="11" r="1"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Dorada a la Plancha</div>
+        <div class="dish-desc">Dorada de acuicultura local, a la plancha con lim&oacute;n y hierbas provenzales.</div>
+        <div class="dish-price">desde 18 &euro;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POSTRES -->
+  <div class="tab-panel" id="tab-postres">
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Tarta de Queso Artesanal</div>
+        <div class="dish-desc">Cremosa tarta de queso al horno con coulis de frutos rojos de temporada.</div>
+        <div class="dish-price">desde 6 &euro;</div>
+      </div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Crema Catalana</div>
+        <div class="dish-desc">Receta cl&aacute;sica con az&uacute;car quemado al momento. Tradici&oacute;n en cada cucharada.</div>
+        <div class="dish-price">desde 5 &euro;</div>
+      </div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      </div>
+      <div class="dish-body">
+        <div class="dish-name">Sorbete de Lim&oacute;n al Cava</div>
+        <div class="dish-desc">Refrescante sorbete casero de lim&oacute;n con un chorrito de cava brut. Ligero y festivo.</div>
+        <div class="dish-price">desde 5 &euro;</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section class="galeria" id="galeria">
+  <div class="galeria-header reveal">
+    <p class="sec-label">Galer&iacute;a</p>
+    <h2 class="sec-title">Momentos en <em>Tejota</em></h2>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="galeria-grid">
+    <div class="g-item reveal"><img src="foto-carne.jpg" alt="Chulet&oacute;n a la brasa"></div>
+    <div class="g-item reveal"><img src="foto-tabla.jpg" alt="Tabla de ib&eacute;ricos"></div>
+    <div class="g-item reveal"><img src="foto-tartar.webp" alt="Tartar de at&uacute;n"></div>
+    <div class="g-item reveal"><img src="foto-tartar.webp" alt="Detalle de tartar"></div>
+    <div class="g-item reveal"><img src="foto-carne.jpg" alt="Detalle de la brasa"></div>
+    <div class="g-item reveal"><img src="foto-tabla.jpg" alt="Productos de temporada"></div>
+  </div>
+</section>
+
+<!-- RESENAS -->
+<section class="resenas" id="resenas">
+  <div class="resenas-header reveal">
+    <p class="sec-label">Opiniones</p>
+    <h2 class="sec-title">Lo que dicen <em>nuestros clientes</em></h2>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="resenas-inner">
+    <div class="rating-big reveal">
+      <div class="rating-score">4.4</div>
+      <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+      <div class="rating-label">Valoraci&oacute;n media en Google</div>
+      <div class="chart-container">
+        <canvas id="ratingsChart"></canvas>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="review-text">&ldquo;Fuimos en familia y la experiencia fue incre&iacute;ble. El chulet&oacute;n estaba en su punto perfecto y el servicio fue atento y amable. Sin duda repetiremos.&rdquo;</p>
+        <div class="review-author">Mar&iacute;a G. &middot; Google Reviews</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="review-text">&ldquo;Cada plato era una delicia. Y la carne al centro estaba tierna y jugosa. Un sitio que repetir&iacute;a sin dudarlo. Gran relaci&oacute;n calidad-precio.&rdquo;</p>
+        <div class="review-author">Felix Bravo &middot; Google Reviews</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <p class="review-text">&ldquo;Muy buen ambiente y cocina tradicional bien ejecutada. La tabla de ib&eacute;ricos para empezar es imprescindible. Un restaurante que hace honor a Yecla.&rdquo;</p>
+        <div class="review-author">Carlos M. &middot; Google Reviews</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="contacto" id="contacto">
+  <div class="contact-info reveal">
+    <p class="sec-label">D&oacute;nde estamos</p>
+    <h2 class="sec-title">Vis&iacute;tanos en <em>Yecla</em></h2>
+    <div class="sec-rule"></div>
+    <p class="sec-sub">Te esperamos en el centro de Yecla, Murcia. Reserva tu mesa por tel&eacute;fono o WhatsApp.</p>
+    <div class="hours-list">
+      <div class="hours-item">
+        <span class="hours-day">Lunes</span>
+        <span class="hours-closed">Cerrado</span>
+      </div>
+      <div class="hours-item">
+        <span class="hours-day">Martes &ndash; Viernes</span>
+        <span class="hours-time">13:30 &ndash; 16:00 &middot; 20:30 &ndash; 23:00</span>
+      </div>
+      <div class="hours-item">
+        <span class="hours-day">S&aacute;bado</span>
+        <span class="hours-time">13:30 &ndash; 16:30 &middot; 20:30 &ndash; 23:30</span>
+      </div>
+      <div class="hours-item">
+        <span class="hours-day">Domingo</span>
+        <span class="hours-time">13:30 &ndash; 16:30</span>
+      </div>
+    </div>
+    <div class="contact-detail">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      Av. Literato Azor&iacute;n, 8 &middot; 30510 Yecla, Murcia
+    </div>
+    <div class="contact-detail">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+      <a href="tel:+34611510550">611 510 550</a>
+    </div>
+  </div>
+  <div class="map-wrap reveal">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3123.8!2d-1.1140!3d38.6124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd63eed1234567%3A0x1!2sAv.%20Literato%20Azor%C3%ADn%2C%208%2C%2030510%20Yecla%2C%20Murcia!5e0!3m2!1ses!2ses!4v1717200000000"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      title="Ubicaci&oacute;n Restaurante Tejota en Yecla">
+    </iframe>
+    <a class="map-cta" href="https://maps.google.com/?q=Av.+Literato+Azor%C3%ADn,+8,+30510+Yecla,+Murcia" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      C&oacute;mo llegar
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Tejota<span>.</span></div>
+  <p class="footer-copy">&copy; 2026 Restaurante Tejota &middot; La Taberna del Herrero &middot; Yecla, Murcia</p>
+  <nav class="footer-links">
+    <a href="#inicio">Inicio</a>
+    <a href="#carta">Carta</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  function safe(fn, name) {
+    try { fn(); }
+    catch (e) { console.warn('[Tejota] ' + name + ' failed:', e); }
+  }
+
+  /* SPLASH */
+  function initSplash() {
+    var splash = document.getElementById('splash');
+    if (!splash) return;
+    setTimeout(function () { splash.classList.add('hidden'); }, 1800);
+  }
+
+  /* NAV */
+  function initNav() {
+    var nav = document.getElementById('mainNav');
+    if (!nav) return;
+    function onScroll() {
+      if (window.scrollY > 60) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* EMBER PARTICLES */
+  function initEmbers() {
+    var canvas = document.getElementById('embersCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W, H, particles = [], raf;
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+
+    function Particle() { this.reset(); }
+    Particle.prototype.reset = function () {
+      this.x  = Math.random() * W;
+      this.y  = H + 10;
+      this.vx = (Math.random() - 0.5) * 0.6;
+      this.vy = -(Math.random() * 1.2 + 0.4);
+      this.r  = Math.random() * 2 + 0.8;
+      this.alpha = 0;
+      this.life  = 0;
+      this.maxLife = Math.random() * 180 + 120;
+      var hue = 35 + Math.random() * 20;
+      this.color = 'hsl(' + hue + ',85%,62%)';
+    };
+    Particle.prototype.update = function () {
+      this.life++;
+      var t = this.life / this.maxLife;
+      this.alpha = t < 0.2 ? t / 0.2 : t > 0.7 ? (1 - t) / 0.3 : 1;
+      this.alpha *= 0.7;
+      this.x += this.vx + Math.sin(this.life * 0.05) * 0.3;
+      this.y += this.vy;
+      if (this.life >= this.maxLife) this.reset();
+    };
+    Particle.prototype.draw = function () {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    };
+
+    resize();
+    for (var i = 0; i < 55; i++) {
+      var p = new Particle();
+      p.y = Math.random() * H;
+      p.life = Math.floor(Math.random() * p.maxLife);
+      particles.push(p);
+    }
+
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      for (var j = 0; j < particles.length; j++) {
+        particles[j].update();
+        particles[j].draw();
+      }
+      if (!document.hidden) raf = requestAnimationFrame(loop);
+    }
+    raf = requestAnimationFrame(loop);
+
+    window.addEventListener('resize', resize);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) raf = requestAnimationFrame(loop);
+    });
+  }
+
+  /* HERO GSAP */
+  function initHero() {
+    if (typeof gsap === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    var tl = gsap.timeline({ delay: 1.9 });
+    tl.to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' })
+      .to('.ht-line', { y: '0%', duration: 1, ease: 'power4.out', stagger: 0.12 }, '-=0.3')
+      .to('.hero-rule', { width: 280, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+      .to('.hero-sub', { opacity: 1, duration: 0.7, ease: 'power2.out' }, '-=0.3')
+      .to('.hero-actions', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.3');
+  }
+
+  /* REVEAL */
+  function initReveal() {
+    var els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function (el) { observer.observe(el); });
+    setTimeout(function () {
+      els.forEach(function (el) { el.classList.add('in-view'); });
+    }, 6000);
+  }
+
+  /* TABS */
+  function initTabs() {
+    var btns = document.querySelectorAll('.tab-btn');
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var tab = btn.getAttribute('data-tab');
+        document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+        document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
+        btn.classList.add('active');
+        var panel = document.getElementById('tab-' + tab);
+        if (panel) panel.classList.add('active');
+        if (typeof VanillaTilt !== 'undefined' && panel) {
+          VanillaTilt.init(panel.querySelectorAll('.dish-card'), { max: 8, speed: 400, glare: true, 'max-glare': 0.08 });
+        }
+      });
+    });
+  }
+
+  /* TILT */
+  function initTilt() {
+    if (typeof VanillaTilt === 'undefined') return;
+    var cards = document.querySelectorAll('#tab-entrantes .dish-card');
+    VanillaTilt.init(cards, { max: 8, speed: 400, glare: true, 'max-glare': 0.08 });
+  }
+
+  /* CHART */
+  function initChart() {
+    if (typeof Chart === 'undefined') return;
+    var canvas = document.getElementById('ratingsChart');
+    if (!canvas) return;
+    new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: ['5 ★', '4 ★', '3 ★', '2 ★', '1 ★'],
+        datasets: [{
+          data: [65, 20, 10, 3, 2],
+          backgroundColor: ['#C9A84C','#C9A84C','rgba(201,168,76,0.4)','rgba(201,168,76,0.2)','rgba(201,168,76,0.1)'],
+          borderRadius: 3,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        scales: {
+          x: { display: false, max: 100 },
+          y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 11 }, color: '#6b6460' } }
+        }
+      }
+    });
+  }
+
+  /* BOOT */
+  function boot() {
+    safe(initSplash, 'splash');
+    safe(initNav,    'nav');
+    safe(initEmbers, 'embers');
+    safe(initHero,   'hero');
+    safe(initReveal, 'reveal');
+    safe(initTabs,   'tabs');
+    safe(initTilt,   'tilt');
+    safe(initChart,  'chart');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+</body>
+</html>
