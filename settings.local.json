@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(anthropic-skills:adrian-saenz-hostinger-premium-website)",
+      "Skill(anthropic-skills:adrian-saenz-hostinger-premium-website:*)"
+    ]
+  }
+}

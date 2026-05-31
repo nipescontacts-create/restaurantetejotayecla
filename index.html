@@ -1,0 +1,2076 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restaurante Tejota â€” La Taberna del Herrero Â· Yecla</title>
+  <meta name="description" content="Restaurante Tejota en Yecla, Murcia. Cocina con alma, sabor con carÃ¡cter. Carnes a la brasa, cocina de producto, ambiente Ãºnico." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js?v=20260531" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js?v=20260531" defer></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js?v=20260531" defer></script>
+
+  <!-- Vanilla Tilt -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js?v=20260531" defer></script>
+
+  <style>
+    /* â”€â”€â”€ TOKENS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    :root {
+      --white:       #ffffff;
+      --off-white:   #F8F5F0;
+      --dark:        #1a1a1a;
+      --dark-2:      #242020;
+      --dark-3:      #2e2825;
+      --gold:        #C9A84C;
+      --gold-light:  #E2C77A;
+      --rust:        #8B3A3A;
+      --cream:       #F2EBDA;
+      --muted:       #6b6460;
+      --line-dark:   rgba(26,26,26,0.12);
+      --line-light:  rgba(242,235,218,0.15);
+      --nav-h:       72px;
+      --ease-out:    cubic-bezier(0.16,1,0.3,1);
+      --ease-in-out: cubic-bezier(0.45,0,0.55,1);
+    }
+
+    /* â”€â”€â”€ RESET â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      overflow-x: clip;
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--white);
+      color: var(--dark);
+      overflow-x: clip;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font: inherit; }
+
+    /* â”€â”€â”€ SPLASH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    #splash {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--dark);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1rem;
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+      animation: splashSafety 0.01s 4.5s forwards;
+    }
+    #splash.is-out {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-4px);
+    }
+    @keyframes splashSafety { to { opacity: 0; pointer-events: none; } }
+    .splash-logo {
+      width: 72px; height: 72px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      animation: splashPulse 1.5s ease-in-out infinite;
+    }
+    .splash-logo svg { width: 40px; height: 40px; fill: var(--dark); }
+    @keyframes splashPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
+      50%       { transform: scale(1.06); box-shadow: 0 0 0 16px rgba(201,168,76,0); }
+    }
+    .splash-text {
+      font-family: 'Playfair Display', serif;
+      color: var(--cream);
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* â”€â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000;
+      height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    #nav.scrolled {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      box-shadow: 0 1px 0 var(--line-dark);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      transition: color 0.4s ease;
+    }
+    #nav.scrolled .nav-brand { color: var(--dark); }
+    .nav-links {
+      display: flex; align-items: center; gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0;
+      height: 1px; background: var(--gold);
+      transform: scaleX(0); transform-origin: right;
+      transition: transform 0.3s var(--ease-out);
+    }
+    .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+    #nav.scrolled .nav-links a { color: var(--dark); }
+    .nav-links a:hover { color: var(--gold); }
+    #nav.scrolled .nav-links a:hover { color: var(--rust); }
+    .nav-cta {
+      padding: 0.55rem 1.4rem;
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white) !important;
+      background: transparent;
+      transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+    }
+    .nav-cta:hover { background: var(--gold); border-color: var(--gold); color: var(--dark) !important; }
+    #nav.scrolled .nav-cta {
+      border-color: var(--dark);
+      color: var(--dark) !important;
+    }
+    #nav.scrolled .nav-cta:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--dark) !important;
+    }
+    .nav-hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      width: 28px; cursor: pointer;
+    }
+    .nav-hamburger span {
+      height: 2px; background: var(--white);
+      border-radius: 2px;
+      transition: background 0.4s ease, transform 0.3s ease, opacity 0.3s ease;
+    }
+    #nav.scrolled .nav-hamburger span { background: var(--dark); }
+
+    /* â”€â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      display: flex; align-items: flex-end; justify-content: flex-start;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: var(--dark-2);
+    }
+    .hero-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transform-origin: center center;
+      will-change: transform;
+      animation: kenBurns 22s ease-in-out infinite alternate;
+    }
+    @keyframes kenBurns {
+      0%   { transform: scale(1.0) translate(0%, 0%); }
+      100% { transform: scale(1.14) translate(-2.5%, -1.5%); }
+    }
+    .hero-tint {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(105deg, rgba(10,7,5,0.88) 0%, rgba(10,7,5,0.55) 50%, rgba(10,7,5,0.22) 100%),
+        linear-gradient(to top, rgba(10,7,5,0.8) 0%, transparent 45%);
+    }
+    .hero-grain {
+      position: absolute; inset: 0;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-embers {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: left;
+      padding: 0 clamp(2rem, 8vw, 9rem) clamp(7rem, 12vh, 10rem);
+      max-width: 1000px;
+      width: 100%;
+    }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    .hero-eyebrow-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--gold); flex-shrink: 0;
+    }
+    .hero-eyebrow-text {
+      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4.2rem, 11.5vw, 10rem);
+      font-weight: 400;
+      line-height: 0.94;
+      color: var(--white);
+      margin-bottom: 0;
+      overflow: hidden;
+    }
+    .ht-line {
+      display: block;
+      transform: translateY(110%);
+      will-change: transform;
+    }
+    .hero-title em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 60%, #b8872a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-rule {
+      width: 0; height: 1px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      margin: 2rem 0;
+    }
+    .hero-sub {
+      font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+      font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 2.8rem;
+      opacity: 0;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 1rem 2.4rem;
+      background: var(--gold);
+      color: var(--dark);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.3s ease, transform 0.25s var(--ease-out), box-shadow 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(201,168,76,0.35);
+    }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 1rem 2.4rem;
+      border: 1px solid rgba(255,255,255,0.35);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.3s ease, border-color 0.3s ease, transform 0.25s var(--ease-out);
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.7);
+      transform: translateY(-3px);
+    }
+    .hero-scroll {
+      position: absolute; bottom: 5.5rem; right: clamp(2rem, 6vw, 6rem);
+      z-index: 3;
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      opacity: 0;
+      animation: scrollFade 2s ease-in-out 2.4s infinite forwards;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 52px;
+      background: linear-gradient(to bottom, var(--gold) 0%, transparent 100%);
+      animation: scrollLineDrop 2s ease-in-out 2.4s infinite;
+    }
+    @keyframes scrollLineDrop {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 0; }
+      30%  { transform: scaleY(1); opacity: 1; }
+      70%  { transform: scaleY(1); opacity: 1; }
+      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    }
+    .hero-scroll-text {
+      font-size: 0.6rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      writing-mode: vertical-rl;
+    }
+    @keyframes scrollFade {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 1; }
+    }
+    /* â”€â”€â”€ HERO TICKER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    .hero-ticker {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 3;
+      overflow: hidden;
+      border-top: 1px solid rgba(201,168,76,0.2);
+      padding: 0.75rem 0;
+      background: rgba(10,7,5,0.4);
+      backdrop-filter: blur(4px);
+    }
+    .hero-ticker-track {
+      display: flex; gap: 0;
+      white-space: nowrap;
+      animation: tickerRun 30s linear infinite;
+    }
+    .hero-ticker-item {
+      display: inline-flex; align-items: center; gap: 1.4rem;
+      padding-right: 1.4rem;
+      font-size: 0.65rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+    }
+    .hero-ticker-sep { color: var(--gold); font-size: 0.9rem; }
+    @keyframes tickerRun {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* â”€â”€â”€ SERVICES STRIP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    .services-strip {
+      background: var(--gold);
+      overflow: hidden;
+      height: 50px;
+      position: relative;
+    }
+    .services-track {
+      display: flex; align-items: center; gap: 0;
+      white-space: nowrap;
+      height: 100%;
+      animation: servicesRun 22s linear infinite;
+    }
+    .services-track:hover { animation-play-state: paused; }
+    @keyframes servicesRun {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .service-item {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      padding: 0 2.5rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dark);
+      white-space: nowrap;
+      border-right: 1px solid rgba(26,26,26,0.15);
+    }
+    .service-item svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* â”€â”€â”€ QUOTE INTERLUDE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    .quote-interlude {
+      background: var(--dark);
+      padding: clamp(4rem, 8vw, 7rem) clamp(2rem, 8vw, 10rem);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .quote-interlude::before {
+      content: '\201C';
+      position: absolute;
+      top: -2rem; left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 20rem;
+      color: rgba(201,168,76,0.04);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--cream);
+      max-width: 860px;
+      margin: 0 auto 2rem;
+    }
+    .quote-text em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .quote-author {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(242,235,218,0.4);
+    }
+
+    /* â”€â”€â”€ SECTION HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      text-wrap: balance;
+    }
+    .section-title em { font-style: italic; color: var(--rust); }
+    .section-title-light em { color: var(--gold-light); }
+    .section-body {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 56ch;
+    }
+    .section-divider {
+      width: 48px; height: 2px;
+      background: var(--gold);
+      margin: 1.5rem 0;
+    }
+
+    /* reveal states */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal[data-split] { opacity: 1; transform: none; }
+
+    /* â”€â”€â”€ ABOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    #nosotros {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 600px;
+    }
+    .about-visual {
+      position: relative;
+      background: var(--dark-2);
+      overflow: hidden;
+    }
+    .about-visual img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s var(--ease-out);
+    }
+    .about-visual:hover img { transform: scale(1.04); }
+    .about-visual-tint {
+      position: absolute; inset: 0;
+      background: rgba(20,15,12,0.3);
+      pointer-events: none;
+    }
+    .about-badge {
+      position: absolute; bottom: 2.5rem; right: 2.5rem;
+      background: var(--gold);
+      color: var(--dark);
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      animation: badgeSpin 20s linear infinite;
+    }
+    .about-badge-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .about-badge-text {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+    @keyframes badgeSpin { to { transform: rotate(360deg); } }
+    .about-content {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: clamp(3rem, 8vw, 7rem);
+      background: var(--off-white);
+    }
+    .about-stats {
+      display: flex; gap: 2.5rem;
+      margin-top: 2.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--line-dark);
+    }
+    .about-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 400;
+      color: var(--dark);
+      line-height: 1;
+    }
+    .about-stat-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+
+    /* â”€â”€â”€ MENU â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    #carta {
+      padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 5vw, 4rem);
+      background: var(--white);
+    }
+    .menu-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .menu-tabs {
+      display: flex; gap: 0; justify-content: center;
+      margin-top: 2.5rem;
+      border: 1px solid var(--line-dark);
+      border-radius: 4px;
+      overflow: hidden;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .menu-tab {
+      padding: 0.7rem 1.6rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      border-right: 1px solid var(--line-dark);
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+    .menu-tab:last-child { border-right: none; }
+    .menu-tab.active { background: var(--dark); color: var(--white); }
+    .menu-tab:hover:not(.active) { background: var(--off-white); color: var(--dark); }
+    .menu-panels { position: relative; }
+    .menu-panel {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .menu-panel.active { display: grid; }
+    .dish-card {
+      background: var(--white);
+      border: 1px solid var(--line-dark);
+      border-radius: 6px;
+      padding: 1.8rem;
+      cursor: default;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .dish-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 12px 40px rgba(201,168,76,0.12), 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .dish-icon {
+      width: 32px; height: 32px;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .dish-icon svg { width: 100%; height: 100%; }
+
+    /* â”€â”€â”€ WHATSAPP BUTTON â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    .wa-btn {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      z-index: 900;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.25s var(--ease-out), box-shadow 0.25s ease;
+      animation: waPulse 2.5s ease-in-out 3s infinite;
+    }
+    .wa-btn:hover {
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 8px 28px rgba(37,211,102,0.55), 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .wa-btn svg { width: 30px; height: 30px; fill: #ffffff; }
+    .wa-tooltip {
+      position: absolute;
+      right: calc(100% + 12px);
+      top: 50%; transform: translateY(-50%);
+      background: var(--dark);
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 500;
+      white-space: nowrap;
+      padding: 0.45rem 0.9rem;
+      border-radius: 4px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .wa-tooltip::after {
+      content: '';
+      position: absolute;
+      left: 100%; top: 50%;
+      transform: translateY(-50%);
+      border: 5px solid transparent;
+      border-left-color: var(--dark);
+    }
+    .wa-btn:hover .wa-tooltip { opacity: 1; }
+    @keyframes waPulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 0 0 0 rgba(37,211,102,0.4); }
+      50%       { box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 0 0 12px rgba(37,211,102,0); }
+    }
+    .dish-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+    .dish-desc {
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .dish-tag {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.25rem 0.7rem;
+      background: var(--off-white);
+      border-radius: 20px;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .dish-tag.featured {
+      background: rgba(201,168,76,0.12);
+      color: #8a6b1a;
+    }
+
+    /* â”€â”€â”€ GALLERY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    #galeria {
+      padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 5vw, 4rem);
+      background: var(--dark);
+    }
+    .gallery-header {
+      margin-bottom: 3rem;
+    }
+    .gallery-header .section-title { color: var(--cream); }
+    .gallery-header .section-label { color: var(--gold); }
+    .gallery-header .section-divider { background: var(--gold); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 1rem;
+    }
+    .gallery-item {
+      overflow: hidden;
+      border-radius: 4px;
+      position: relative;
+      background: var(--dark-3);
+    }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s var(--ease-out), filter 0.5s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.08);
+      filter: saturate(1.15) brightness(1.06);
+    }
+    .gallery-item-overlay {
+      position: absolute; inset: 0;
+      background: rgba(20,15,12,0.0);
+      transition: background 0.4s ease;
+      display: flex; align-items: flex-end;
+      padding: 1.2rem;
+    }
+    .gallery-item:hover .gallery-item-overlay { background: rgba(20,15,12,0.4); }
+    .gallery-item-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      color: var(--white);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      font-style: italic;
+    }
+    .gallery-item:hover .gallery-item-label { opacity: 1; transform: none; }
+    .gi-1 { grid-column: 1 / 7; grid-row: 1; min-height: 340px; }
+    .gi-2 { grid-column: 7 / 10; grid-row: 1; min-height: 340px; }
+    .gi-3 { grid-column: 10 / 13; grid-row: 1; min-height: 340px; }
+    .gi-4 { grid-column: 1 / 5; grid-row: 2; min-height: 280px; }
+    .gi-5 { grid-column: 5 / 13; grid-row: 2; min-height: 280px; }
+
+    /* â”€â”€â”€ REVIEWS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    #resenas {
+      padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 5vw, 4rem);
+      background: var(--off-white);
+    }
+    .reviews-header { text-align: center; margin-bottom: 4rem; }
+    .reviews-header .section-title em { color: var(--rust); }
+    .rating-hero {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap;
+    }
+    .rating-big {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--dark);
+    }
+    .rating-right { text-align: left; }
+    .stars-row {
+      display: flex; gap: 4px; font-size: 1.4rem; color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .rating-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .reviews-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 4rem;
+      margin-top: 3rem;
+      align-items: start;
+    }
+    .review-cards {
+      display: flex; flex-direction: column; gap: 1.5rem;
+    }
+    .review-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem;
+      border: 1px solid var(--line-dark);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .review-card-stars { color: var(--gold); font-size: 0.85rem; margin-bottom: 1rem; }
+    .review-card-text {
+      font-size: 0.92rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--dark);
+      font-style: italic;
+      margin-bottom: 1.2rem;
+    }
+    .review-card-author {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--dark);
+      letter-spacing: 0.04em;
+    }
+    .review-card-source {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+    .chart-container {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem;
+      border: 1px solid var(--line-dark);
+    }
+    .chart-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .chart-wrap { position: relative; height: 220px; }
+    .google-badge {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line-dark);
+    }
+    .google-badge-text { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+
+    /* â”€â”€â”€ HOURS & CONTACT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    #contacto {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .contact-info {
+      padding: clamp(3rem, 6vw, 6rem);
+      background: var(--dark);
+      color: var(--cream);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .contact-info .section-label { color: var(--gold); }
+    .contact-info .section-title { color: var(--cream); }
+    .contact-info .section-title em { color: var(--gold-light); }
+    .contact-info .section-divider { background: var(--gold); }
+    .hours-table {
+      margin-top: 1.5rem;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .hours-table tr {
+      border-bottom: 1px solid var(--line-light);
+    }
+    .hours-table tr:last-child { border-bottom: none; }
+    .hours-table td {
+      padding: 0.7rem 0;
+      font-size: 0.88rem;
+    }
+    .hours-table td:first-child {
+      font-weight: 500;
+      color: var(--cream);
+      width: 50%;
+    }
+    .hours-table td:last-child {
+      color: rgba(242,235,218,0.65);
+      text-align: right;
+    }
+    .hours-today td:first-child { color: var(--gold); }
+    .hours-closed { color: rgba(242,235,218,0.35) !important; }
+    .contact-details {
+      margin-top: 2.5rem;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .contact-item {
+      display: flex; align-items: flex-start; gap: 0.8rem;
+    }
+    .contact-item-icon {
+      color: var(--gold);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .contact-item-icon svg { width: 16px; height: 16px; fill: currentColor; }
+    .contact-item-text { font-size: 0.88rem; line-height: 1.5; color: rgba(242,235,218,0.8); }
+    .contact-item-text strong { color: var(--cream); font-weight: 500; display: block; }
+    .contact-phone-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      margin-top: 1.5rem;
+      padding: 0.85rem 2rem;
+      background: var(--gold);
+      color: var(--dark);
+      border-radius: 3px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .contact-phone-link:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .map-container {
+      position: relative;
+      background: #2a2420;
+      min-height: 500px;
+      overflow: hidden;
+    }
+    .map-inner {
+      width: 100%; height: 100%;
+      min-height: 500px;
+    }
+    .map-inner iframe {
+      width: 100%; height: 100%;
+      border: 0;
+      filter: grayscale(20%) contrast(0.95);
+    }
+    .map-overlay-btn {
+      position: absolute;
+      bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.8rem 1.8rem;
+      background: var(--white);
+      color: var(--dark);
+      border-radius: 40px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      transition: background 0.3s ease, transform 0.2s ease, color 0.3s ease;
+    }
+    .map-overlay-btn:hover { background: var(--gold); color: var(--dark); transform: translate(-50%, -3px); }
+    .map-overlay-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+    /* â”€â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    footer {
+      background: var(--dark-2);
+      color: var(--cream);
+      padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) 2rem;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 3rem;
+      align-items: start;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--line-light);
+    }
+    .footer-col { display: flex; flex-direction: column; }
+    .footer-center { align-items: center; text-align: center; }
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--cream);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.3rem;
+    }
+    .footer-brand-sub {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    .footer-logo-mark {
+      width: 64px; height: 64px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .footer-logo-mark svg { width: 36px; height: 36px; fill: var(--dark); }
+    .footer-col-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .footer-col-links {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.6rem;
+    }
+    .footer-col-links a {
+      font-size: 0.85rem;
+      color: rgba(242,235,218,0.65);
+      transition: color 0.25s ease;
+    }
+    .footer-col-links a:hover { color: var(--gold); }
+    .footer-social {
+      display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: center;
+    }
+    .social-link {
+      width: 38px; height: 38px;
+      border: 1px solid var(--line-light);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(242,235,218,0.6);
+      transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+    }
+    .social-link svg { width: 16px; height: 16px; fill: currentColor; }
+    .social-link:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.1); }
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 1.5rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-copy { font-size: 0.75rem; color: rgba(242,235,218,0.4); }
+
+    /* â”€â”€â”€ MOBILE NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    .mobile-menu {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: var(--dark);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: var(--cream);
+      transition: color 0.25s ease;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-menu-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      color: var(--cream); font-size: 2rem; cursor: pointer;
+    }
+
+    /* â”€â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    @media (max-width: 900px) {
+      #nosotros { grid-template-columns: 1fr; }
+      .about-visual { min-height: 340px; }
+      .reviews-layout { grid-template-columns: 1fr; }
+      #contacto { grid-template-columns: 1fr; }
+      .map-container { min-height: 380px; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-center { order: -1; align-items: flex-start; text-align: left; }
+      .footer-social { justify-content: flex-start; }
+      .footer-logo-mark { margin: 0 0 1.5rem; }
+      .gi-1 { grid-column: 1 / 13; grid-row: 1; }
+      .gi-2 { grid-column: 1 / 7; grid-row: 2; }
+      .gi-3 { grid-column: 7 / 13; grid-row: 2; }
+      .gi-4 { grid-column: 1 / 7; grid-row: 3; }
+      .gi-5 { grid-column: 7 / 13; grid-row: 3; }
+    }
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .services-track { animation-duration: 14s; }
+      .gallery-grid { display: flex; flex-direction: column; }
+      .gallery-item { min-height: 220px !important; }
+      .menu-tabs { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- WHATSAPP BUTTON -->
+<a class="wa-btn"
+   href="https://wa.me/34611510550?text=Hola%2C%20me%20gustar%C3%ADa%20hacer%20una%20reserva%20en%20Restaurante%20Tejota."
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="Reservar por WhatsApp">
+  <span class="wa-tooltip">Reservar por WhatsApp</span>
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+</a>
+
+<!-- SPLASH -->
+<div id="splash" data-splash>
+  <div class="splash-logo">
+    <svg viewBox="0 0 40 40"><path d="M20 4 L22 14 L32 10 L24 18 L36 22 L24 22 L28 34 L20 26 L12 34 L16 22 L4 22 L16 18 L8 10 L18 14 Z" opacity="0.9"/></svg>
+  </div>
+  <div class="splash-text">Tejota</div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <span class="mobile-menu-close" id="mobileMenuClose">âœ•</span>
+  <a href="#nosotros">Nosotros</a>
+  <a href="#carta">Carta</a>
+  <a href="#galeria">GalerÃ­a</a>
+  <a href="#resenas">ReseÃ±as</a>
+  <a href="#contacto">Contacto</a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-brand">Restaurante Tejota</div>
+  <ul class="nav-links">
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#carta">Carta</a></li>
+    <li><a href="#galeria">GalerÃ­a</a></li>
+    <li><a href="#resenas">ReseÃ±as</a></li>
+    <li><a href="#contacto" class="nav-cta">Reservar</a></li>
+  </ul>
+  <div class="nav-hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <img src="foto-fachada.jpg" alt="La Taberna del Herrero â€” entrada" id="heroImg"
+         onerror="this.style.display='none'" />
+  </div>
+  <div class="hero-tint"></div>
+  <div class="hero-grain"></div>
+  <canvas id="embersCanvas" class="hero-embers"></canvas>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow" id="heroEyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      <span class="hero-eyebrow-text">La Taberna del Herrero</span>
+      <span class="hero-eyebrow-dot"></span>
+      <span class="hero-eyebrow-text">Yecla, Murcia</span>
+    </div>
+    <h1 class="hero-title" id="heroTitle">
+      <span class="ht-line">Cocina</span>
+      <span class="ht-line">con <em>alma.</em></span>
+    </h1>
+    <div class="hero-rule" id="heroRule"></div>
+    <p class="hero-sub" id="heroSub">Brasas artesanas &nbsp;Â·&nbsp; Producto de temporada &nbsp;Â·&nbsp; Sabor con carÃ¡cter</p>
+    <div class="hero-actions" id="heroActions">
+      <a href="tel:611510550" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.32a2 2 0 0 1 1.98-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.92a16 16 0 0 0 6.06 6.06l1.16-1.16a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2z"/></svg>
+        Reserva tu mesa
+      </a>
+      <a href="#carta" class="btn-ghost">Ver la carta</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-text">Descubre</span>
+  </div>
+
+  <div class="hero-ticker">
+    <div class="hero-ticker-track" id="heroTickerTrack">
+      <span class="hero-ticker-item">Restaurante Tejota <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Brasas artesanas <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Yecla, Murcia <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">ChuletÃ³n de buey <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Cocina de producto <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Carta de vinos <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Comedor privado <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Terraza exterior <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Restaurante Tejota <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Brasas artesanas <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Yecla, Murcia <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">ChuletÃ³n de buey <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Cocina de producto <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Carta de vinos <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Comedor privado <span class="hero-ticker-sep">Â·</span></span>
+      <span class="hero-ticker-item">Terraza exterior <span class="hero-ticker-sep">Â·</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES STRIP -->
+<div class="services-strip">
+  <div class="services-track">
+    <div class="service-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Terraza exterior</div>
+    <div class="service-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>Chimenea</div>
+    <div class="service-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>Comedor privado</div>
+    <div class="service-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z"/></svg>Carta de vinos</div>
+    <div class="service-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2 1.1 0 2-.9 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6h3.5M16 22v-7"/></svg>Cocina de mercado</div>
+    <div class="service-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Terraza exterior</div>
+    <div class="service-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>Chimenea</div>
+    <div class="service-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>Comedor privado</div>
+    <div class="service-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z"/></svg>Carta de vinos</div>
+    <div class="service-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2 1.1 0 2-.9 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6h3.5M16 22v-7"/></svg>Cocina de mercado</div>
+  </div>
+</div>
+
+<!-- NOSOTROS -->
+<section id="nosotros">
+  <div class="about-visual">
+    <img src="foto-carne.jpg" alt="ChuletÃ³n a la brasa en Restaurante Tejota"
+         onerror="this.style.background='#2e2825'" />
+    <div class="about-visual-tint"></div>
+    <div class="about-badge">
+      <span class="about-badge-num">4.4</span>
+      <span class="about-badge-text">Google<br>Rating</span>
+    </div>
+  </div>
+  <div class="about-content">
+    <p class="section-label reveal">Nuestra historia</p>
+    <h2 class="section-title reveal">El arte de reunirse<br><em>alrededor del fuego.</em></h2>
+    <div class="section-divider reveal"></div>
+    <p class="section-body reveal">
+      Tejota naciÃ³ de la pasiÃ³n por la cocina honesta: producto de temporada, tÃ©cnica depurada y el calor que sÃ³lo aporta una buena brasa. En Av. Literato AzorÃ­n encontrarÃ¡s un espacio donde cada plato cuenta una historia y cada visita se convierte en un recuerdo.
+    </p>
+    <p class="section-body reveal" style="margin-top: 1rem;">
+      TomÃ¡s y su equipo cuidan cada detalle, desde la selecciÃ³n de la materia prima hasta el ambiente acogedor que invita a quedarse. Cocina de mercado, brasas artesanas y alma de taberna.
+    </p>
+    <div class="about-stats">
+      <div>
+        <div class="about-stat-num reveal">â˜… 4.4</div>
+        <div class="about-stat-label">ValoraciÃ³n media</div>
+      </div>
+      <div>
+        <div class="about-stat-num reveal">5</div>
+        <div class="about-stat-label">DÃ­as abiertos</div>
+      </div>
+      <div>
+        <div class="about-stat-num reveal">3</div>
+        <div class="about-stat-label">Espacios Ãºnicos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE INTERLUDE -->
+<div class="quote-interlude reveal">
+  <blockquote class="quote-text">
+    "Cada plato era una delicia. Y la carne al centro estaba <em>tierna y jugosa.</em> Un sitio para repetir varias veces."
+  </blockquote>
+  <p class="quote-author">Felix Bravo &nbsp;Â·&nbsp; Google Reviews</p>
+</div>
+
+<!-- CARTA -->
+<section id="carta">
+  <div class="menu-header">
+    <p class="section-label reveal">Lo que cocinamos</p>
+    <h2 class="section-title reveal">Nuestra <em>carta</em></h2>
+    <div class="section-divider reveal" style="margin-left: auto; margin-right: auto;"></div>
+    <div class="menu-tabs" role="tablist">
+      <button class="menu-tab active" data-tab="compartir" role="tab">Compartir</button>
+      <button class="menu-tab" data-tab="carnes" role="tab">Carnes</button>
+      <button class="menu-tab" data-tab="pescados" role="tab">Pescados</button>
+      <button class="menu-tab" data-tab="postres" role="tab">Postres</button>
+    </div>
+  </div>
+
+  <div class="menu-panels">
+    <!-- COMPARTIR -->
+    <div class="menu-panel active" id="panel-compartir">
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2 1.1 0 2-.9 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6h3.5"/><path d="M16 22v-7"/></svg></div>
+        <div class="dish-name">Marinera gratinada</div>
+        <div class="dish-desc">Marinera de la casa gratinada al momento. Imprescindible segÃºn nuestros clientes.</div>
+        <span class="dish-tag featured">â˜… Imprescindible</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c0 0-5 6-5 11a5 5 0 0 0 10 0c0-2.5-1.5-4.5-3-6 0 2-1 3-2 3.5C11 9 12 6 12 2z"/></svg></div>
+        <div class="dish-name">Cecina de LeÃ³n</div>
+        <div class="dish-desc">Cecina curada con aceite de oliva virgen extra y lascas de parmesano.</div>
+        <span class="dish-tag featured">â˜… Imprescindible</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="17"/><line x1="9.5" y1="14.5" x2="14.5" y2="14.5"/></svg></div>
+        <div class="dish-name">Tabla de ibÃ©ricos y quesos</div>
+        <div class="dish-desc">SelecciÃ³n de embutidos ibÃ©ricos y quesos artesanos de pequeÃ±os productores.</div>
+        <span class="dish-tag">Para compartir</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
+        <div class="dish-name">Croquetas de la casa</div>
+        <div class="dish-desc">Croquetas artesanas de receta propia, cremosas por dentro y crujientes por fuera.</div>
+        <span class="dish-tag">ClÃ¡sico</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 12c0 0-2.5-4 1-7 0 0 1 3 4.5 4.5C15.5 11 18 9 21 8c0 4-3 7-7 7-2.5 0-4.5-1-5-2-.5 1-2 2-4 2 1.5-1 2-2 1.5-3z"/><circle cx="18" cy="9" r="0.5" fill="currentColor"/></svg></div>
+        <div class="dish-name">Tartar de atÃºn con aguacate</div>
+        <div class="dish-desc">Tartar de atÃºn rojo con aguacate, vinagreta de cÃ­tricos y caviar de trucha.</div>
+        <span class="dish-tag">Chef's choice</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c0 0-5 6-5 11a5 5 0 0 0 10 0c0-2.5-1.5-4.5-3-6 0 2-1 3-2 3.5C11 9 12 6 12 2z"/></svg></div>
+        <div class="dish-name">Provolone a la brasa</div>
+        <div class="dish-desc">Queso provolone ahumado directamente sobre las brasas, con orÃ©gano y tomate.</div>
+        <span class="dish-tag">De la brasa</span>
+      </div>
+    </div>
+
+    <!-- CARNES -->
+    <div class="menu-panel" id="panel-carnes">
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c0 0-5 6-5 11a5 5 0 0 0 10 0c0-2.5-1.5-4.5-3-6 0 2-1 3-2 3.5C11 9 12 6 12 2z"/></svg></div>
+        <div class="dish-name">ChuletÃ³n de Buey al carbÃ³n</div>
+        <div class="dish-desc">ChuletÃ³n de buey madurado 45 dÃ­as, a la brasa de carbÃ³n vegetal. La estrella de la casa.</div>
+        <span class="dish-tag featured">â˜… Estrella</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2 1.1 0 2-.9 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6h3.5"/><path d="M16 22v-7"/></svg></div>
+        <div class="dish-name">Secreto ibÃ©rico a la brasa</div>
+        <div class="dish-desc">Secreto de cerdo ibÃ©rico de bellota, brasa lenta y punto rosado perfecto.</div>
+        <span class="dish-tag">IbÃ©rico</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2 1.1 0 2-.9 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6h3.5"/><path d="M16 22v-7"/></svg></div>
+        <div class="dish-name">Entrecot de ternera</div>
+        <div class="dish-desc">Entrecot de ternera nacional con sal en escamas y aceite de hierbas.</div>
+        <span class="dish-tag">ClÃ¡sico</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c0 0-5 6-5 11a5 5 0 0 0 10 0c0-2.5-1.5-4.5-3-6 0 2-1 3-2 3.5C11 9 12 6 12 2z"/></svg></div>
+        <div class="dish-name">TxuletÃ³n para dos</div>
+        <div class="dish-desc">Corte vasco de txuletÃ³n para compartir, mÃ­nimo 1 kg, brasa y sal en escamas.</div>
+        <span class="dish-tag featured">Para 2</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C7 2 3 6 3 11h18c0-5-4-9-9-9z"/><path d="M9 11v8a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-8"/></svg></div>
+        <div class="dish-name">Solomillo con salsa de boletus</div>
+        <div class="dish-desc">Solomillo de ternera con reducciÃ³n de boletus edulis y trufa negra.</div>
+        <span class="dish-tag">Premium</span>
+      </div>
+    </div>
+
+    <!-- PESCADOS -->
+    <div class="menu-panel" id="panel-pescados">
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 12c0 0-2.5-4 1-7 0 0 1 3 4.5 4.5C15.5 11 18 9 21 8c0 4-3 7-7 7-2.5 0-4.5-1-5-2-.5 1-2 2-4 2 1.5-1 2-2 1.5-3z"/><circle cx="18" cy="9" r="0.5" fill="currentColor"/></svg></div>
+        <div class="dish-name">Lubina a la sal</div>
+        <div class="dish-desc">Lubina entera horneada bajo costra de sal marina, con aceite de oliva y limÃ³n.</div>
+        <span class="dish-tag featured">â˜… Recomendado</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c1.5-2 3-3 4.5-3S9 10 10.5 12s3 3 4.5 3 3-1 4.5-3"/><path d="M2 17c1.5-2 3-3 4.5-3s3 1 4.5 3 3 3 4.5 3 3-1 4.5-3"/></svg></div>
+        <div class="dish-name">Bacalao confitado</div>
+        <div class="dish-desc">Lomo de bacalao confitado a baja temperatura con pil-pil ligero y pimientos asados.</div>
+        <span class="dish-tag">TradiciÃ³n</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 12c0 0-2.5-4 1-7 0 0 1 3 4.5 4.5C15.5 11 18 9 21 8c0 4-3 7-7 7-2.5 0-4.5-1-5-2-.5 1-2 2-4 2 1.5-1 2-2 1.5-3z"/><circle cx="18" cy="9" r="0.5" fill="currentColor"/></svg></div>
+        <div class="dish-name">Rape a la plancha</div>
+        <div class="dish-desc">Medallones de rape a la plancha con salsa americana y gambas frescas.</div>
+        <span class="dish-tag">Del mar</span>
+      </div>
+    </div>
+
+    <!-- POSTRES -->
+    <div class="menu-panel" id="panel-postres">
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="dish-name">Tarta de queso artesanal</div>
+        <div class="dish-desc">Tarta de queso de elaboraciÃ³n propia, textura cremosa, base de galleta y frutos rojos.</div>
+        <span class="dish-tag featured">â˜… Favorito</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="dish-name">Coulant de chocolate</div>
+        <div class="dish-desc">Bizcocho tibio de chocolate negro con corazÃ³n fundido y helado de vainilla.</div>
+        <span class="dish-tag">ClÃ¡sico</span>
+      </div>
+      <div class="dish-card" data-tilt data-tilt-max="8" data-tilt-speed="400">
+        <div class="dish-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="dish-name">Crema catalana</div>
+        <div class="dish-desc">Crema catalana tradicional con caramelizado crujiente en el momento.</div>
+        <span class="dish-tag">Tradicional</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÃA -->
+<section id="galeria">
+  <div class="gallery-header reveal">
+    <p class="section-label">En imÃ¡genes</p>
+    <h2 class="section-title section-title-light">El sabor <em>se ve.</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item gi-1">
+      <img src="foto-fachada.jpg" alt="La Taberna del Herrero â€” entrada"
+           onerror="this.parentNode.style.background='#2a2420'" />
+      <div class="gallery-item-overlay"><span class="gallery-item-label">La entrada</span></div>
+    </div>
+    <div class="gallery-item gi-2">
+      <img src="foto-tartar.webp" alt="Tartar de atÃºn"
+           onerror="this.parentNode.style.background='#332a20'" />
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Tartar de atÃºn</span></div>
+    </div>
+    <div class="gallery-item gi-3">
+      <img src="foto-tabla.jpg" alt="Tabla de ibÃ©ricos"
+           onerror="this.parentNode.style.background='#3a2e1a'" />
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Tabla de ibÃ©ricos</span></div>
+    </div>
+    <div class="gallery-item gi-4">
+      <img src="foto-tartar.webp" alt="Cocina de producto"
+           onerror="this.parentNode.style.background='#2a2e1e'" />
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Cocina de producto</span></div>
+    </div>
+    <div class="gallery-item gi-5">
+      <img src="foto-carne.jpg" alt="ChuletÃ³n a la brasa"
+           onerror="this.parentNode.style.background='#332218'" />
+      <div class="gallery-item-overlay"><span class="gallery-item-label">ChuletÃ³n a la brasa</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEÃ‘AS -->
+<section id="resenas">
+  <div class="reviews-header reveal">
+    <p class="section-label">Lo que dicen</p>
+    <h2 class="section-title">Opiniones <em>reales</em></h2>
+    <div class="section-divider" style="margin: 1.5rem auto;"></div>
+    <div class="rating-hero">
+      <div class="rating-big" id="ratingBig">0</div>
+      <div class="rating-right">
+        <div class="stars-row" id="starsRow">â˜†â˜†â˜†â˜†â˜†</div>
+        <div class="rating-meta">Basado en reseÃ±as de Google</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-layout">
+    <div class="review-cards">
+      <div class="review-card">
+        <div class="review-card-stars">â˜…â˜…â˜…â˜…â˜…</div>
+        <p class="review-card-text">"Una experiencia fantÃ¡stica en Tejota. La atenciÃ³n del personal es cercana y muy profesional, siempre pendientes de que todo estÃ© perfecto. La comida sorprende por su calidad y sabor: platos bien elaborados, con productos frescos y presentaciones cuidadas. El ambiente es acogedor y moderno, ideal tanto para una comida tranquila como para una cena especial. Sin duda, un lugar al que volverÃ© y que recomiendo a cualquiera que visite Yecla."</p>
+        <div class="review-card-author">Charo Alcaraz Morata</div>
+        <div class="review-card-source">Local Guide Â· Google Maps</div>
+      </div>
+      <div class="review-card">
+        <div class="review-card-stars">â˜…â˜…â˜…â˜…â˜…</div>
+        <p class="review-card-text">"IncreÃ­ble lugar, un trato de 10 y una comida perfecta. TomÃ¡s y su familia son espectaculares, recomiendo 100% venir mÃ­nimo una vez porque seguro querrÃ¡s repetir. Indispensable pedir la marinera gratinada y la cecina, no tengo palabras para el gran lugar y la magnÃ­fica experiencia que hemos vivido. Â¡Â¡Volveremos!!"</p>
+        <div class="review-card-author">David GarcÃ­a MartÃ­nez</div>
+        <div class="review-card-source">Local Guide Â· Google Maps</div>
+      </div>
+      <div class="review-card">
+        <div class="review-card-stars">â˜…â˜…â˜…â˜…â˜…</div>
+        <p class="review-card-text">"Fuimos de comida de empresa y fue una sorpresa. El salÃ³n es grande y bellamente decorado. La atenciÃ³n de los camareros buena y rÃ¡pida. Lo mejor la comida. Toda muy bien preparada, presentada y de un sabor exquisito. Cada plato era una delicia. Y la carne al centro estaba tierna y jugosa. Luego de comer subimos arriba y seguimos la fiesta con el tardeo y buena mÃºsica. Un sitio para repetir varias veces."</p>
+        <div class="review-card-author">Felix Bravo</div>
+        <div class="review-card-source">Local Guide Â· Google Maps</div>
+      </div>
+    </div>
+    <div>
+      <div class="chart-container">
+        <div class="chart-title">DistribuciÃ³n de valoraciones</div>
+        <div class="chart-wrap">
+          <canvas id="ratingsChart"></canvas>
+        </div>
+        <div class="google-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          <span class="google-badge-text">ReseÃ±as verificadas en Google</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO / HORARIOS -->
+<section id="contacto">
+  <div class="contact-info">
+    <p class="section-label reveal">EncuÃ©ntranos</p>
+    <h2 class="section-title reveal">Horarios &amp;<br><em>Contacto</em></h2>
+    <div class="section-divider reveal"></div>
+
+    <table class="hours-table reveal">
+      <tr class="hours-closed">
+        <td>Lunes</td>
+        <td>Cerrado</td>
+      </tr>
+      <tr class="hours-closed">
+        <td>Martes</td>
+        <td>Cerrado</td>
+      </tr>
+      <tr>
+        <td>MiÃ©rcoles</td>
+        <td>13:30 â€“ 23:30</td>
+      </tr>
+      <tr>
+        <td>Jueves</td>
+        <td>13:30 â€“ 01:00</td>
+      </tr>
+      <tr>
+        <td>Viernes</td>
+        <td>13:30 â€“ 01:00</td>
+      </tr>
+      <tr>
+        <td>SÃ¡bado</td>
+        <td>13:30 â€“ 01:00</td>
+      </tr>
+      <tr>
+        <td>Domingo</td>
+        <td>13:30 â€“ 24:00</td>
+      </tr>
+    </table>
+
+    <div class="contact-details reveal">
+      <div class="contact-item">
+        <span class="contact-item-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </span>
+        <div class="contact-item-text">
+          <strong>DirecciÃ³n</strong>
+          Av. Literato AzorÃ­n, 8<br>30510 Yecla, Murcia
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-icon">
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </span>
+        <div class="contact-item-text">
+          <strong>TelÃ©fono</strong>
+          611 51 05 50
+        </div>
+      </div>
+    </div>
+
+    <a href="tel:611510550" class="contact-phone-link reveal">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.32a2 2 0 0 1 1.98-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.92a16 16 0 0 0 6.06 6.06l1.16-1.16a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2z"/></svg>
+      Llamar ahora
+    </a>
+  </div>
+
+  <div class="map-container">
+    <div class="map-inner">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3118.4!2d-1.1177!3d38.6108!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd63e72f95c5e6a3%3A0x0!2sAv.+Literato+Azor%C3%ADn%2C+8%2C+30510+Yecla%2C+Murcia!5e0!3m2!1ses!2ses!4v1"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Mapa Restaurante Tejota â€” Av. Literato AzorÃ­n, 8, Yecla, Murcia"
+      ></iframe>
+    </div>
+    <a
+      href="https://maps.google.com/?q=Av.+Literato+AzorÃ­n,+8,+30510+Yecla,+Murcia"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="map-overlay-btn"
+    >
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      CÃ³mo llegar
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-col">
+      <div class="footer-col-title">NavegaciÃ³n</div>
+      <ul class="footer-col-links">
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#carta">Carta</a></li>
+        <li><a href="#galeria">GalerÃ­a</a></li>
+        <li><a href="#resenas">ReseÃ±as</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-center">
+      <div class="footer-logo-mark">
+        <svg viewBox="0 0 40 40"><path d="M20 6 C20 6 14 12 14 18 C14 22 16.5 24 19 24 L19 34 L21 34 L21 24 C23.5 24 26 22 26 18 C26 12 20 6 20 6Z M17 18 C17 15 18.5 11 20 9 C21.5 11 23 15 23 18 C23 20 21.5 21.5 20 21.5 C18.5 21.5 17 20 17 18Z"/><rect x="10" y="34" width="20" height="2.5" rx="1"/></svg>
+      </div>
+      <div class="footer-brand">Restaurante Tejota</div>
+      <div class="footer-brand-sub">La Taberna del Herrero</div>
+      <div class="footer-social">
+        <a href="#" class="social-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="#" class="social-link" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://maps.google.com/?q=Restaurante+Tejota+Yecla" target="_blank" rel="noopener" class="social-link" aria-label="Google">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col" style="align-items: flex-end; text-align: right;">
+      <div class="footer-col-title">Contacto</div>
+      <ul class="footer-col-links" style="align-items: flex-end;">
+        <li><a href="tel:611510550">611 51 05 50</a></li>
+        <li><a href="https://maps.google.com/?q=Av.+Literato+AzorÃ­n,+8,+Yecla" target="_blank" rel="noopener">Av. Literato AzorÃ­n, 8</a></li>
+        <li><a>30510 Yecla, Murcia</a></li>
+      </ul>
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <div class="footer-col-title">Servicios</div>
+        <p style="font-size: 0.82rem; color: rgba(242,235,218,0.5); line-height: 1.8;">
+          Terraza Â· Chimenea<br>Comedor privado
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">Â© 2026 Restaurante Tejota â€” La Taberna del Herrero. Todos los derechos reservados.</div>
+    <div class="footer-copy">Yecla, Murcia Â· 611 51 05 50</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* â”€â”€ SAFE WRAPPER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function safe(fn, name) {
+    try { fn(); } catch (e) { console.warn("[" + name + "]", e); }
+  }
+
+  /* â”€â”€ SPLASH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initSplash() {
+    var splash = document.getElementById("splash");
+    if (!splash) return;
+    var hide = function () { splash.classList.add("is-out"); };
+    if (document.readyState === "complete") {
+      setTimeout(hide, 600);
+    } else {
+      window.addEventListener("load", function () { setTimeout(hide, 400); });
+    }
+    setTimeout(hide, 3500);
+  }
+
+  /* â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initNav() {
+    var nav = document.getElementById("nav");
+    if (!nav) return;
+    var onScroll = function () {
+      if (window.scrollY > 60) {
+        nav.classList.add("scrolled");
+      } else {
+        nav.classList.remove("scrolled");
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    /* hamburger */
+    var ham = document.getElementById("hamburger");
+    var mob = document.getElementById("mobileMenu");
+    var cls = document.getElementById("mobileMenuClose");
+    if (ham && mob) {
+      ham.addEventListener("click", function () { mob.classList.add("open"); });
+    }
+    if (cls && mob) {
+      cls.addEventListener("click", function () { mob.classList.remove("open"); });
+    }
+    if (mob) {
+      mob.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () { mob.classList.remove("open"); });
+      });
+    }
+  }
+
+  /* â”€â”€ SMOOTH SCROLL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initSmoothScroll() {
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute("href");
+      if (!id || id === "#") return;
+      var el = document.querySelector(id);
+      if (!el) return;
+      e.preventDefault();
+      window.scrollTo({
+        top: el.getBoundingClientRect().top + window.scrollY - 80,
+        behavior: "smooth"
+      });
+    });
+  }
+
+  /* â”€â”€ HERO ANIMATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initHero() {
+    if (!window.gsap) return;
+    var lines   = document.querySelectorAll(".ht-line");
+    var eyebrow = document.getElementById("heroEyebrow");
+    var rule    = document.getElementById("heroRule");
+    var sub     = document.getElementById("heroSub");
+    var actions = document.getElementById("heroActions");
+    var tl = gsap.timeline({ delay: 0.55 });
+
+    /* eyebrow slides in */
+    tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" })
+    /* title lines sweep up from clip */
+      .to(lines, {
+        y: "0%",
+        duration: 1.1,
+        stagger: 0.14,
+        ease: "power4.out"
+      }, "-=0.3")
+    /* gold rule draws right */
+      .to(rule, { width: "90px", duration: 0.8, ease: "power2.out" }, "-=0.5")
+    /* sub fades */
+      .to(sub, { opacity: 1, duration: 0.7, ease: "power2.out" }, "-=0.4")
+    /* CTA buttons */
+      .to(actions, { opacity: 1, duration: 0.6, ease: "power2.out" }, "-=0.3");
+  }
+
+  /* â”€â”€ EMBER PARTICLES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initEmbers() {
+    var canvas = document.getElementById("embersCanvas");
+    if (!canvas) return;
+    var ctx = canvas.getContext("2d");
+    var W, H, raf;
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+
+    var embers = [];
+    var MAX = 55;
+
+    function spawn() {
+      return {
+        x:       Math.random() * W,
+        y:       H + 8,
+        r:       Math.random() * 1.8 + 0.4,
+        vy:      Math.random() * 0.9 + 0.35,
+        vx:      (Math.random() - 0.5) * 0.5,
+        alpha:   0,
+        life:    0,
+        maxLife: Math.random() * 180 + 100,
+        hue:     Math.random() * 28 + 28      /* 28â€“56: amber to gold */
+      };
+    }
+
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+
+      if (embers.length < MAX && Math.random() < 0.45) embers.push(spawn());
+
+      for (var i = embers.length - 1; i >= 0; i--) {
+        var e = embers[i];
+        e.x  += e.vx + Math.sin(e.life * 0.04) * 0.35;
+        e.y  -= e.vy;
+        e.life++;
+
+        var p = e.life / e.maxLife;
+        var a = p < 0.18 ? p / 0.18 : p > 0.65 ? (1 - p) / 0.35 : 1;
+        a *= 0.55;
+
+        /* core dot */
+        ctx.globalAlpha = a;
+        ctx.fillStyle   = "hsl(" + e.hue + ",85%,68%)";
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.r, 0, 6.283);
+        ctx.fill();
+
+        /* soft glow */
+        ctx.globalAlpha = a * 0.28;
+        ctx.fillStyle   = "hsl(" + e.hue + ",100%,82%)";
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.r * 3, 0, 6.283);
+        ctx.fill();
+
+        if (e.life >= e.maxLife || e.y < -10) {
+          embers.splice(i, 1);
+        }
+      }
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(loop);
+    }
+
+    loop();
+
+    /* pause when tab hidden */
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { cancelAnimationFrame(raf); }
+      else { loop(); }
+    });
+  }
+
+  /* â”€â”€ PARALLAX HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initParallax() {
+    if (!window.gsap || !window.ScrollTrigger) return;
+    gsap.registerPlugin(ScrollTrigger);
+    var heroImg = document.getElementById("heroImg");
+    if (!heroImg) return;
+    /* override the CSS kenBurns during scroll */
+    gsap.to(heroImg, {
+      y: "18%",
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+        onEnter: function () { heroImg.style.animation = "none"; },
+      }
+    });
+  }
+
+  /* â”€â”€ REVEAL ON SCROLL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initReveals() {
+    var els = document.querySelectorAll(".reveal");
+    if (!els.length) return;
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-visible");
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: "0px 0px -2% 0px" });
+
+    els.forEach(function (el, i) {
+      el.style.transitionDelay = (i % 4) * 0.08 + "s";
+      io.observe(el);
+    });
+
+    /* 6s safety */
+    setTimeout(function () {
+      document.querySelectorAll(".reveal:not(.is-visible)").forEach(function (el) {
+        if (el.getBoundingClientRect().top < window.innerHeight) {
+          el.classList.add("is-visible");
+        }
+      });
+    }, 6000);
+  }
+
+  /* â”€â”€ SCROLL ANIMATIONS (GSAP) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initScrollAnimations() {
+    if (!window.gsap || !window.ScrollTrigger) return;
+
+    /* gallery items stagger */
+    gsap.from(".gallery-item", {
+      opacity: 0,
+      y: 50,
+      duration: 0.9,
+      stagger: 0.12,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: "#galeria",
+        start: "top 75%"
+      }
+    });
+
+    /* review cards stagger */
+    gsap.from(".review-card", {
+      opacity: 0,
+      x: -40,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: "#resenas",
+        start: "top 70%"
+      }
+    });
+
+    /* chart container */
+    gsap.from(".chart-container", {
+      opacity: 0,
+      x: 40,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".chart-container",
+        start: "top 80%"
+      }
+    });
+
+    /* services strip */
+    gsap.from(".service-item", {
+      opacity: 0,
+      y: 20,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: ".services-strip",
+        start: "top 90%"
+      }
+    });
+  }
+
+  /* â”€â”€ MENU TABS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initMenuTabs() {
+    var tabs = document.querySelectorAll(".menu-tab");
+    var panels = document.querySelectorAll(".menu-panel");
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        var target = tab.dataset.tab;
+        tabs.forEach(function (t) { t.classList.remove("active"); });
+        panels.forEach(function (p) { p.classList.remove("active"); });
+        tab.classList.add("active");
+        var panel = document.getElementById("panel-" + target);
+        if (panel) {
+          panel.classList.add("active");
+          /* re-init tilt on new cards */
+          if (window.VanillaTilt) {
+            VanillaTilt.init(panel.querySelectorAll("[data-tilt]"), { max: 8, speed: 400, glare: false });
+          }
+        }
+      });
+    });
+  }
+
+  /* â”€â”€ VANILLA TILT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initTilt() {
+    if (!window.VanillaTilt) return;
+    if (window.matchMedia("(hover: none)").matches) return;
+    VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+      max: 8,
+      speed: 400,
+      glare: false,
+      scale: 1.02
+    });
+  }
+
+  /* â”€â”€ RATING COUNT-UP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initRatingCountUp() {
+    var el = document.getElementById("ratingBig");
+    var starsRow = document.getElementById("starsRow");
+    if (!el) return;
+
+    var observed = false;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && !observed) {
+          observed = true;
+          io.unobserve(e.target);
+          var start = 0;
+          var end = 44;
+          var duration = 1200;
+          var startTime = null;
+
+          function step(ts) {
+            if (!startTime) startTime = ts;
+            var progress = Math.min((ts - startTime) / duration, 1);
+            var eased = 1 - Math.pow(1 - progress, 3);
+            var current = Math.round(eased * end);
+            el.textContent = (current / 10).toFixed(1);
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              el.textContent = "4.4";
+              if (starsRow) starsRow.innerHTML = "â˜…â˜…â˜…â˜…<span style='opacity:.4'>â˜…</span>";
+            }
+          }
+          requestAnimationFrame(step);
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(el);
+  }
+
+  /* â”€â”€ CHART.JS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initChart() {
+    var canvas = document.getElementById("ratingsChart");
+    if (!canvas || !window.Chart) return;
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          io.unobserve(e.target);
+          renderChart(canvas);
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(canvas);
+  }
+
+  function renderChart(canvas) {
+    new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: ["5 â˜…", "4 â˜…", "3 â˜…", "2 â˜…", "1 â˜…"],
+        datasets: [{
+          label: "ReseÃ±as",
+          data: [65, 20, 10, 3, 2],
+          backgroundColor: [
+            "rgba(201,168,76,0.85)",
+            "rgba(201,168,76,0.65)",
+            "rgba(201,168,76,0.4)",
+            "rgba(139,58,58,0.3)",
+            "rgba(139,58,58,0.2)"
+          ],
+          borderColor: "transparent",
+          borderRadius: 4,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 1200, easing: "easeOutQuart" },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) { return ctx.parsed.y + "%"; }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            border: { display: false },
+            ticks: {
+              font: { family: "'Inter', sans-serif", size: 11 },
+              color: "#6b6460"
+            }
+          },
+          y: {
+            display: false,
+            max: 80
+          }
+        }
+      }
+    });
+  }
+
+  /* â”€â”€ TODAY HIGHLIGHT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function initHoursHighlight() {
+    var days = ["domingo", "lunes", "martes", "miÃ©rcoles", "jueves", "viernes", "sÃ¡bado"];
+    var today = days[new Date().getDay()];
+    var rows = document.querySelectorAll(".hours-table tr");
+    rows.forEach(function (row) {
+      var td = row.querySelector("td");
+      if (td && td.textContent.trim().toLowerCase() === today) {
+        row.classList.add("hours-today");
+      }
+    });
+  }
+
+  /* â”€â”€ BOOT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  function boot() {
+    safe(initSplash, "initSplash");
+    safe(initNav, "initNav");
+    safe(initSmoothScroll, "initSmoothScroll");
+    safe(initHoursHighlight, "initHoursHighlight");
+    safe(initReveals, "initReveals");
+    safe(initMenuTabs, "initMenuTabs");
+    safe(initRatingCountUp, "initRatingCountUp");
+    safe(initChart, "initChart");
+
+    /* start embers immediately â€” no GSAP dependency */
+    safe(initEmbers, "initEmbers");
+
+    /* GSAP-dependent (wait for library) */
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+          safe(initHero, "initHero");
+          safe(initParallax, "initParallax");
+          safe(initScrollAnimations, "initScrollAnimations");
+          safe(initTilt, "initTilt");
+        }, 100);
+      });
+    } else {
+      setTimeout(function () {
+        safe(initHero, "initHero");
+        safe(initParallax, "initParallax");
+        safe(initScrollAnimations, "initScrollAnimations");
+        safe(initTilt, "initTilt");
+      }, 100);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+
+})();
+</script>
+
+</body>
+</html>
+
